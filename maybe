@@ -1,0 +1,11 @@
+<html>
+  <head>willItWork</head>
+  
+  <body>
+     will js work?
+     <br/>
+     <script type="text/javascript">
+    document.write("<span style="color:red;">yes</span>");
+  </script>
+  </body>
+</html>

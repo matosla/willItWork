@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+ <head>
+  <title> ztree demo </title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" href="css/zTreeStyle.css" type="text/css">
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/jquery.ztree.core.min.js"></script>
+  <script type="text/javascript" src="js/jquery.ztree.excheck.min.js"></script>
+ </head>
+<body>
+<div>
+   <ul id="treeDemo" class="ztree"></ul>
+   
+   <button onclick="getUrla()">提交</button>
+</div>
+<script type="text/javascript">
+  function getUrla(){
+	  var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+
+	  var _nodes = $(treeObj.getCheckedNodes(true));
+	  var urls ="";
+	  var len=$.fn.zTree.getZTreeObj("treeDemo").getCheckedNodes(true).length;
+	  console.log("len--->"+len);
+	  if(len>0){
+		  for(var i=0;i<len;i++){
+			
+			  if ( (_nodes[i].data_url) != undefined ){
+			         console.log(_nodes[i].data_url);
+    				  urls = urls + _nodes[i].data_url + ",";
+			  }
+	      } 
+	  }
+	  console.log("urls----->"+urls);
+  }
+</script>
+<script type="text/javaScript">
+   var zTreeObj;
+   // zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）
+   var setting = {
+        view: {
+            dblClickExpand: true ,//双击节点时，是否自动展开父节点的标识
+            showLine: true,//是否显示节点之间的连线
+            fontCss:{'color':'black','font-weight':'bold'},//字体样式函数
+            selectedMulti: true //设置是否允许同时选中多个节点
+        },
+        check:{
+        	autoCheckTrigger:false,
+    		chkboxType: { "Y": "ps", "N": "ps" },        	
+        	enable: true,
+    		chkStyle: "checkbox",
+          	nocheckInherit:false,
+          	chkDisabledInherit:false,
+          	radioType:"level"
+        },
+		data: {
+			simpleData: {
+				enable: true,
+				idKey: "id",
+				pIdKey: "pId",
+				rootPId: 0
+			}
+	}
+		
+       
+    };
+   
+   
+   // zTree 的数据属性，深入使用请参考 API 文档（zTreeNode 节点数据详解）
+  var zNodes=[
+    {"id":1, "pId":0, "name":"用户管理"},  
+	{"id":10, "pId":1, "name":"个人用户管理","data_url":"userManage/userList"}, 
+    {"id":100, "pId":10, "name":"添加个人用户","data_url":"userManage/addUser"}, 
+	{"id":101, "pId":10, "name":"用户详情","data_url":"userManage/userDetail"}, 
+	
+	{"id":11, "pId":1, "name":"商家用户管理", "data_url":"userManage/merchant"},
+    {"id":110, "pId":11, "name":"添加商家用户","data_url":"userManage/addMerchant"},
+	{"id":111, "pId":11, "name":"用户详情","data_url":"userManage/merchantDetail"},
+		
+	{"id":12, "pId":1, "name":"用户入组管理","data_url":"userManage/joinGroup"},  
+	{"id":13, "pId":1, "name":"用户组管理","data_url":"userManage/userGroup"},
+    {"id":130, "pId":13, "name":"添加用户组","data_url":"userManage/addGroup"},  
+	{"id":131, "pId":13, "name":"查看","data_url":"userManage/groupDetail"}, 
+	
+	{"id":14, "pId":1, "name":"用户配置","data_url":"userManage/userconf"},
+    {"id":140, "pId":14, "name":"等级配置","data_url":"userManage/userconf"},
+    {"id":141, "pId":14, "name":"成就配置","data_url":"userManage/userconf"},
+    {"id":142, "pId":14, "name":"揭发任务配置","data_url":"userManage/userconf"},
+	{"id":143, "pId":14, "name":"用户提现配置","data_url":"userManage/userconf"},
+    {"id":144, "pId":14, "name":"添加等级配置","data_url":"userManage/leveld"},
+    {"id":145, "pId":14, "name":"修改","data_url":"userManage/leveld"},
+	{"id":146, "pId":14, "name":"删除","data_url":"userManage/delevel"},
+	
+	{"id":2, "pId":0, "name":"任务管理"}, 
+    {"id":20, "pId":2, "name":"任务列表","data_url":"taskManage/taskList"},
+    {"id":200, "pId":20, "name":"查看详情","data_url":"taskManage/taskDetail"},	
+    {"id":21, "pId":2, "name":"任务类型","data_url":"taskManage/taskType"}, 
+	{"id":210, "pId":21, "name":"查看子项","data_url":"taskManage/taskType"},
+    {"id":22, "pId":2, "name":"任务模版", "data_url":"taskManage/taskTemp"}, 
+    {"id":23, "pId":2, "name":"任务模型","data_url":"taskManage/taskmodel"}, 
+    {"id":24, "pId":2, "name":"任务说明","data_url":"taskManage/taskexplain"}, 	
+	 
+	{"id":3, "pId":0, "name":"认证管理"},  
+    {"id":30, "pId":3, "name":"个人认证","data_url":"auth/personal"},  
+    {"id":31, "pId":3, "name":"商家认证","data_url":"auth/employee"},  
+
+   
+]
+
+//处理服务端的数据
+  //某角色的perms  taskManage/taskList,taskManage/taskDetail,auth/personal,auth/employee,
+  var  back_perms =["taskManage/taskList",
+                   "taskManage/taskDetail",
+				   "auth/employee"];
+				   
+  var zNodes_edit = "[{'id':31,'pId':3,'name':'商家认证','data_url':'auth/employee'},"+			   
+                     "{'id':31,'pId':3,'name':'商家认证','data_url':'auth/employee'},"+
+                     "{'id':31,'pId':3,'name':'商家认证','data_url':'auth/employee'}]";
+     
+   for (var i=0;i<zNodes.length;i++){
+       //console.log(zNodes[i].data_url);
+	   if(zNodes[i].data_url =!undefined){
+	       for(var j=0;j<back_perms.length;j++){
+		      console.log(back_perms[j]);
+			  //console.log(("'"+back_perms[j]+"'") ===("'"+zNodes[i].data_url+"'"));
+			  if(("'"+back_perms[j]+"'") ===("'"+zNodes[i].data_url+"'")){
+			      console.log(1);
+			  }
+		   }
+	   }
+   }
+
+
+					 
+					 
+
+
+   $(document).ready(function(){
+      zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);//用在zNodes或zNodes_edit
+   });
+  </script>
+</body>
+</html>
